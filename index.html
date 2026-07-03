@@ -37,7 +37,7 @@
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
 <!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <!-- AOS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
@@ -72,21 +72,21 @@
   --input-bg: rgba(255, 255, 255, 0.04);
   --glass-blur: blur(32px) saturate(220%);
 
-  /* Green Accent */
-  --gold: #22C55E;
-  --gold-light: #4ADE80;
-  --gold-soft: #86EFAC;
-  --gold-dark: #15803D;
-  --gold-glow: rgba(34, 197, 94, 0.12);
-  --gold-gradient: linear-gradient(135deg, #22C55E 0%, #4ADE80 50%, #86EFAC 100%);
+  /* Green Accent - Enhanced */
+  --gold: #10B981;
+  --gold-light: #34D399;
+  --gold-soft: #6EE7B7;
+  --gold-dark: #059669;
+  --gold-glow: rgba(16, 185, 129, 0.15);
+  --gold-gradient: linear-gradient(135deg, #10B981 0%, #34D399 50%, #6EE7B7 100%);
   --navy: #0a0a0a;
   --black: #000000;
   --white: #FFFFFF;
   --gray: #E5E5E5;
 
-  --font-display: 'Barlow Condensed', sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  --font-mono: 'Space Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
 
   --radius: 16px;
   --ease: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -261,6 +261,54 @@
 }
 
 /* =========================================================
+   LIQUID GLASS AMBIENT BLOBS
+   Soft moving light pools behind the glass layers, giving the
+   whole page a "liquid" depth without hurting readability.
+========================================================= */
+.liquid-blobs{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.liquid-blobs .blob{
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: .35;
+  background: var(--gold-gradient);
+  will-change: transform;
+}
+.blob-1{ width: 42vmax; height: 42vmax; top: -14vmax; left: -12vmax; animation: blobDrift1 26s ease-in-out infinite; }
+.blob-2{ width: 34vmax; height: 34vmax; bottom: -12vmax; right: -10vmax; animation: blobDrift2 32s ease-in-out infinite; opacity: .22; }
+.blob-3{ width: 26vmax; height: 26vmax; top: 40%; left: 60%; animation: blobDrift3 38s ease-in-out infinite; opacity: .16; }
+[data-theme="light"] .liquid-blobs .blob{ opacity: .18; }
+[data-theme="light"] .blob-2{ opacity: .12; }
+[data-theme="light"] .blob-3{ opacity: .09; }
+
+@keyframes blobDrift1{
+  0%, 100% { transform: translate(0, 0) scale(1); border-radius: 50%; }
+  33%      { transform: translate(6vmax, 4vmax) scale(1.08); border-radius: 46% 54% 60% 40% / 50% 45% 55% 50%; }
+  66%      { transform: translate(-3vmax, 6vmax) scale(0.96); border-radius: 60% 40% 45% 55% / 40% 55% 45% 60%; }
+}
+@keyframes blobDrift2{
+  0%, 100% { transform: translate(0, 0) scale(1); border-radius: 50%; }
+  50%      { transform: translate(-5vmax, -5vmax) scale(1.1); border-radius: 55% 45% 50% 50% / 45% 55% 45% 55%; }
+}
+@keyframes blobDrift3{
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-8vmax, -4vmax) scale(1.15); }
+}
+@media (prefers-reduced-motion: reduce){
+  .liquid-blobs .blob{ animation: none; }
+}
+@media (max-width: 768px){
+  .liquid-blobs .blob{ filter: blur(50px); }
+  .blob-3{ display: none; }
+}
+
+/* =========================================================
    BASE
 ========================================================= */
 *{ margin:0; padding:0; box-sizing:border-box; }
@@ -277,8 +325,9 @@ body{
   font-weight: 400;
   overflow-x: hidden;
   cursor: default;
-  line-height: 1.6;
+  line-height: 1.7;
   transition: background 0.5s ease, color 0.5s ease;
+  letter-spacing: 0.3px;
 }
 img{ max-width:100%; display:block; height:auto; }
 a{ color:inherit; text-decoration:none; }
@@ -459,9 +508,45 @@ input, textarea, select{ font-family:inherit; }
     inset 0 1.5px 0 rgba(255, 255, 255, 0.06),
     inset 0 -1px 0 rgba(0, 0, 0, 0.25),
     inset 0 0 40px rgba(34, 197, 94, 0.02);
-  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.5s ease, box-shadow 0.5s ease, border-radius 0.6s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
   position: relative;
   overflow: hidden;
+}
+/* Liquid specular sheen - injected span, follows pointer, gives a glassy "wet" highlight */
+.glass-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    140px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.35),
+    rgba(255, 255, 255, 0.08) 32%,
+    transparent 65%
+  );
+  mix-blend-mode: overlay;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+.glass-card:hover .glass-shine { opacity: 1; }
+/* Thin top-edge light catch, like glass refracting ambient light */
+.glass-card > .glass-edge {
+  position: absolute;
+  top: 0; left: 8%; right: 8%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+  opacity: .55;
+  z-index: 2;
+  pointer-events: none;
+}
+@keyframes liquidBreathe {
+  0%, 100% { border-radius: var(--radius); }
+  50% { border-radius: calc(var(--radius) + 8px) calc(var(--radius) - 4px) calc(var(--radius) + 6px) calc(var(--radius) - 2px); }
+}
+@media (hover: hover) {
+  .glass-card:hover { animation: liquidBreathe 5s ease-in-out infinite; }
 }
 .glass-card::before {
   content: '';
@@ -502,7 +587,7 @@ input, textarea, select{ font-family:inherit; }
   opacity: 1;
 }
 .glass-card:hover {
-  transform: translateY(-6px) scale(1.01);
+  transform: translateY(-6px) scale(1.01) perspective(800px) rotateX(var(--ry, 0deg)) rotateY(var(--rx, 0deg));
   border-color: rgba(34, 197, 94, 0.25);
   box-shadow: 
     0 20px 60px rgba(34, 197, 94, 0.06),
@@ -547,24 +632,24 @@ input, textarea, select{ font-family:inherit; }
    BUTTONS
 ========================================================= */
 .btn{
-  display:inline-flex; align-items:center; gap:8px; justify-content:center;
-  font-family: var(--font-mono); font-size:.8rem; letter-spacing:.02em;
-  padding: 12px 24px; border-radius: 999px; position:relative; overflow:hidden;
+  display:inline-flex; align-items:center; gap:10px; justify-content:center;
+  font-family: var(--font-body); font-size:.9rem; font-weight: 600; letter-spacing:.01em;
+  padding: 14px 28px; border-radius: 999px; position:relative; overflow:hidden;
   transition: transform .35s var(--ease), box-shadow .35s var(--ease), background .35s, color .35s;
   white-space:nowrap;
 }
 .btn-primary{ 
   background: var(--gold-gradient); 
   color:#0a0a0a; 
-  font-weight:600; 
-  box-shadow: 0 8px 30px -6px rgba(252,163,17,.30);
+  font-weight:700; 
+  box-shadow: 0 8px 32px -6px rgba(16, 185, 129, .35);
 }
 [data-theme="light"] .btn-primary {
   color: #0a0a0a;
 }
 .btn-primary:hover{ 
-  transform: translateY(-3px); 
-  box-shadow: 0 12px 40px -6px rgba(252,163,17,.40); 
+  transform: translateY(-4px); 
+  box-shadow: 0 14px 44px -6px rgba(16, 185, 129, .45); 
 }
 .btn-outline{ 
   border:1px solid var(--glass-border); 
@@ -588,7 +673,7 @@ input, textarea, select{ font-family:inherit; }
    HERO
 ========================================================= */
 .hero{
-  position:relative; min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+  position:relative; min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; justify-content:center;
   padding: 120px 5% 60px; overflow:hidden;
 }
 .circuit-bg{
@@ -640,8 +725,8 @@ input, textarea, select{ font-family:inherit; }
 @keyframes dotPulse{ 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
 
 .hero-title{
-  font-family: var(--font-display); font-weight:700; font-size: clamp(2.8rem, 7vw, 5rem);
-  line-height:1.02; letter-spacing:-.02em; text-transform:uppercase;
+  font-family: var(--font-display); font-weight:800; font-size: clamp(3.4rem, 8.5vw, 5.8rem);
+  line-height:1.08; letter-spacing:-.025em; text-transform:uppercase;
 }
 .grad-text{ background: var(--gold-gradient); -webkit-background-clip:text; background-clip:text; color:transparent; }
 
@@ -652,7 +737,7 @@ input, textarea, select{ font-family:inherit; }
 .type-cursor{ animation: blink 1s step-start infinite; color: var(--gold); }
 @keyframes blink{ 50%{ opacity:0; } }
 
-.hero-desc{ color: var(--text-dim); max-width: 46ch; margin-bottom: 30px; font-size:1.05rem; }
+.hero-desc{ color: var(--text-dim); max-width: 50ch; margin-bottom: 32px; font-size:1.15rem; line-height: 1.7; }
 .hero-buttons{ display:flex; flex-wrap:wrap; gap:12px; }
 .scroll-cue{
   position:absolute; bottom:26px; left:50%; transform:translateX(-50%); z-index:2;
@@ -680,8 +765,8 @@ input, textarea, select{ font-family:inherit; }
   box-shadow: 0 0 8px var(--gold-glow);
 }
 .section-title{
-  font-family: var(--font-display); font-weight:700; font-size: clamp(2rem, 4vw, 3.2rem);
-  margin-top:12px; line-height:1.08; text-transform:uppercase; letter-spacing:.01em;
+  font-family: var(--font-display); font-weight:800; font-size: clamp(2.4rem, 5vw, 4rem);
+  margin-top:16px; line-height:1.12; text-transform:uppercase; letter-spacing:.01em;
 }
 
 /* =========================================================
@@ -723,9 +808,9 @@ input, textarea, select{ font-family:inherit; }
   border-color: rgba(34, 197, 94, 0.25); 
   transform: translateY(-3px);
 }
-.about-col h4{ font-family: var(--font-display); font-size:1rem; letter-spacing:.02em; margin-bottom:6px; display:flex; align-items:center; gap:9px; }
+.about-col h4{ font-family: var(--font-display); font-size:1.15rem; font-weight: 700; letter-spacing:.01em; margin-bottom:10px; display:flex; align-items:center; gap:9px; }
 .about-col h4 i{ background: var(--gold-gradient); -webkit-background-clip:text; background-clip:text; color:transparent; }
-.about-col p{ color: var(--text-dim); font-size:.9rem; }
+.about-col p{ color: var(--text-dim); font-size:1rem; line-height: 1.7; }
 
 /* Skill Popup */
 .skill-popup-overlay {
@@ -881,7 +966,7 @@ input, textarea, select{ font-family:inherit; }
   transform: rotateY(2deg) rotateX(2deg) scale(1.02);
 }
 .skill-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; position:relative; z-index:2; }
-.skill-top span{ font-family: var(--font-display); font-weight:600; font-size:.95rem; }
+.skill-top span{ font-family: var(--font-display); font-weight:700; font-size:1.05rem; }
 .skill-bar{ height:6px; border-radius:99px; background: rgba(0,0,0,0.06); overflow:hidden; position:relative; z-index:2; }
 [data-theme="dark"] .skill-bar { background: rgba(255,255,255,0.06); }
 [data-theme="light"] .skill-bar { background: rgba(0,0,0,0.06); }
@@ -928,8 +1013,8 @@ input, textarea, select{ font-family:inherit; }
   transform: none !important;
   animation: none !important;
 }
-.service-card h3{ font-family: var(--font-display); font-size:1.1rem; margin-bottom:6px; position:relative; z-index:2; }
-.service-card p{ color: var(--text-dim); font-size:.88rem; position:relative; z-index:2; }
+.service-card h3{ font-family: var(--font-display); font-size:1.25rem; font-weight: 700; margin-bottom:10px; position:relative; z-index:2; }
+.service-card p{ color: var(--text-dim); font-size:.95rem; line-height: 1.6; position:relative; z-index:2; }
 
 .service-card .touch-ripple {
   position: absolute;
@@ -1148,7 +1233,7 @@ input, textarea, select{ font-family:inherit; }
   0%, 100% { transform: scale(1) rotate(0deg); }
   50% { transform: scale(1.1) rotate(5deg); }
 }
-.cert-card span{ font-family: var(--font-mono); font-size:.7rem; color: var(--text-dim); text-align:center; padding:0 16px; position:relative; z-index:2; }
+.cert-card span{ font-family: var(--font-body); font-size:.85rem; font-weight: 500; color: var(--text-dim); text-align:center; padding:0 16px; position:relative; z-index:2; line-height: 1.5; }
 .cert-overlay{
   position:absolute; inset:0; background: rgba(252,163,17,.03); opacity:0; display:flex; align-items:center; justify-content:center;
   transition:.3s; font-family: var(--font-mono); font-size:.8rem; color: var(--gold);
@@ -1468,6 +1553,35 @@ input, textarea, select{ font-family:inherit; }
 /* =========================================================
    RESPONSIVE
 ========================================================= */
+
+/* Tablets / small laptops */
+@media (max-width: 1024px) {
+  .hero-inner{ max-width: 760px; gap: 40px; }
+  .about-grid{ grid-template-columns: .8fr 1.2fr; gap: 34px; }
+  .skills-grid{ grid-template-columns: repeat(3, 1fr); }
+  .services-grid{ grid-template-columns: repeat(3, 1fr); }
+  .projects-grid{ grid-template-columns: repeat(2, 1fr); }
+  .cert-gallery{ grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Reduce blur/GPU load on touch devices for smoother scrolling */
+@media (hover: none) and (pointer: coarse) {
+  :root, [data-theme="light"] { --glass-blur: blur(16px) saturate(160%); }
+  .glass-card:hover { animation: none; }
+  #particles-bg, .smoke-layer { opacity: .5; }
+}
+
+/* Safe-area padding for notched phones (iPhone, etc.) */
+@supports (padding: max(0px)) {
+  .navbar{
+    padding-left: max(5%, env(safe-area-inset-left));
+    padding-right: max(5%, env(safe-area-inset-right));
+    padding-top: max(16px, env(safe-area-inset-top));
+  }
+  .back-to-top{ bottom: max(26px, env(safe-area-inset-bottom)); }
+  .footer{ padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+}
+
 @media (max-width: 768px) {
   .hero{ padding-top:80px; padding-bottom:30px; }
   .hero-title{ font-size: clamp(2.2rem, 8vw, 3.2rem); }
@@ -1539,6 +1653,29 @@ input, textarea, select{ font-family:inherit; }
   .btn{ font-size:.7rem; padding:8px 16px; }
 }
 
+/* Very small phones (older/compact devices, e.g. iPhone SE) */
+@media (max-width: 380px) {
+  .hero{ padding-top:70px; }
+  .hero-title{ font-size: clamp(1.6rem, 11vw, 2.2rem); }
+  .eyebrow{ font-size:.58rem; padding:5px 10px; }
+  .section{ padding:34px 3%; }
+  .about-col{ padding:16px; }
+  .blueprint-card{ max-width:200px; }
+  .skills-grid{ gap:8px; }
+  .skill-card{ padding:10px; }
+}
+
+/* Short/landscape phones — hero shouldn't force a full viewport height */
+@media (max-height: 480px) and (orientation: landscape) {
+  .hero{ min-height: auto; padding: 100px 5% 40px; }
+  .scroll-cue{ display:none; }
+}
+
+/* Ensure tap targets stay comfortable on touch screens */
+@media (pointer: coarse) {
+  .nav-link, .btn, .filter-btn, .back-to-top, .contact-item, .social-dock a{ min-height: 44px; }
+}
+
 /* focus visibility */
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
   outline: 3px solid var(--gold); outline-offset: 3px;
@@ -1598,6 +1735,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 <!-- ================= SCROLL PROGRESS ================= -->
 <div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ================= LIQUID GLASS AMBIENT BLOBS ================= -->
+<div class="liquid-blobs" aria-hidden="true">
+  <span class="blob blob-1"></span>
+  <span class="blob blob-2"></span>
+  <span class="blob blob-3"></span>
+</div>
 
 <!-- ================= NAVBAR ================= -->
 <header class="navbar" id="navbar">
@@ -2041,6 +2185,7 @@ window.addEventListener("load", () => {
     initSparkLines();
     initLiquidGlass();
     initTouchVibration();
+    initAmbientBlobParallax();
   }, 1400);
 });
 
@@ -2048,11 +2193,24 @@ window.addEventListener("load", () => {
    LIQUID GLASS EFFECT
 ========================================================= */
 function initLiquidGlass() {
+  const canHover = window.matchMedia('(hover: hover)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   document.querySelectorAll('.glass-card, .about-col, .service-card, .skill-card, .project-card, .cert-card, .timeline-card, .contact-item, .address-item').forEach(card => {
     const ripple = document.createElement('div');
     ripple.className = 'glass-ripple';
     card.appendChild(ripple);
-    
+
+    const shine = document.createElement('div');
+    shine.className = 'glass-shine';
+    card.appendChild(shine);
+
+    const edge = document.createElement('div');
+    edge.className = 'glass-edge';
+    card.appendChild(edge);
+
+    if (!canHover || reduceMotion) return;
+
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -2061,10 +2219,18 @@ function initLiquidGlass() {
       card.style.setProperty('--mouse-y', y + '%');
       ripple.style.left = x + '%';
       ripple.style.top = y + '%';
+
+      /* subtle liquid tilt, capped to a gentle range */
+      const tiltX = ((x - 50) / 50) * 5;
+      const tiltY = ((y - 50) / 50) * -5;
+      card.style.setProperty('--rx', tiltX.toFixed(2) + 'deg');
+      card.style.setProperty('--ry', tiltY.toFixed(2) + 'deg');
     });
-    
+
     card.addEventListener('mouseleave', () => {
       ripple.style.opacity = '0';
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
       setTimeout(() => {
         ripple.style.opacity = '1';
       }, 100);
@@ -2075,6 +2241,32 @@ function initLiquidGlass() {
 /* =========================================================
    TOUCH VIBRATION
 ========================================================= */
+function initAmbientBlobParallax() {
+  const blobs = document.querySelectorAll('.liquid-blobs .blob');
+  if (!blobs.length) return;
+  const canHover = window.matchMedia('(hover: hover)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!canHover || reduceMotion) return;
+
+  let targetX = 0, targetY = 0, curX = 0, curY = 0;
+  window.addEventListener('mousemove', (e) => {
+    targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+    targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  function raf() {
+    curX += (targetX - curX) * 0.04;
+    curY += (targetY - curY) * 0.04;
+    blobs.forEach((blob, i) => {
+      const depth = (i + 1) * 10;
+      blob.style.marginLeft = (curX * depth) + 'px';
+      blob.style.marginTop = (curY * depth) + 'px';
+    });
+    requestAnimationFrame(raf);
+  }
+  raf();
+}
+
 function initTouchVibration() {
   document.querySelectorAll('.skill-card').forEach(card => {
     card.addEventListener('click', function(e) {
